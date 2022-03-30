@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <title>Breadcrumbs</title>
+    
+        <style>
+          html,
+          body,
+          #map {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+          }
+        </style>
+    
+        <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+        <script src="https://js.arcgis.com/4.23/"></script>
+    
+        <script>
+          require(["esri/config","esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/widgets/Editor"], function (esriConfig, Map, MapView, FeatureLayer, Editor) {
+            esriConfig.apiKey = "AAPKfb82767b6c0544b28cc5c9da6cdb604aWkO0Cje9mzrM41Nn9KVOkueqhvRqFKrZ5-PiaFWRmZ-DMd12nefzBwuxwoPCwaLq";
+            const map = new Map({
+              basemap: "streets"
+            });
+            const view = new MapView({
+              map: map,
+              center: [-100, 40],
+              zoom: 5,
+              container: "map"
+            });
+
+            const breadcrumbsLayer = new FeatureLayer({
+                url: "https://services6.arcgis.com/71Zq5dIgbjrL13gj/arcgis/rest/services/breadcrumbs/FeatureServer/0"
+            });
+            map.add(breadcrumbsLayer);
+
+            const pointInfos = {
+              layer: breadcrumbsLayer,
+              formTemplate: { // autocasts to FormTemplate
+                elements: [{ // autocasts to Field Elements
+                  type: "field",
+                  fieldName: "Breadcrumb",
+                  label: "Breadcrumb"
+                }, {
+                  type: "field",
+                  fieldName: "Description",
+                  label: "Description"
+                }]
+              }
+            };
+
+            const editor = new Editor({
+              view: view,
+              layerInfos: [pointInfos]
+            });
+
+            view.ui.add(editor, "top-right");
+          });
+        </script>
+    
+      </head>
+      <body>
+        <div id="map"></div>
+      </body>
+    </html>
